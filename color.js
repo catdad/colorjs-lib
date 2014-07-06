@@ -345,6 +345,11 @@
 			return first.concat( second.reverse() );
 		}
 	};
+    
+    //add a toString method
+    Color.prototype.toString = function toString(){
+        return this.CSS();
+    };
 	
 	//creator function -- check types
 	var creator = function(val){
