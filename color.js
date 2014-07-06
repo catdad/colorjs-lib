@@ -438,7 +438,8 @@
 		//convert H degrees to decimal for calculation
 		h = h/360; // 0 <= H <= 1
 		
-		var rgb = {};
+		var rgb = {},
+            var_r, var_g, var_b;
 		
 		if ( s === 0 ) //HSV from 0 to 1
 		{
@@ -583,5 +584,10 @@
 	
 	//attach to global scope
 	//TODO: RequireJS, AMD, CommonJS, etc.
-    !!(typeof module !== 'undefined' && module.exports) ? (module.exports = ColorLib) : (global.Color = ColorLib);
+    /* jshint -W030 */
+    !function(){
+        /* global module */
+        !!(typeof module !== 'undefined' && module.exports) ? (module.exports = ColorLib) : (global.Color = ColorLib);
+    }();
+    /* jshint +W030 */
 })(this);
