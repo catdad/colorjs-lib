@@ -582,12 +582,22 @@
 		return newColor.setAlpha(1/2).removeAlpha(color2.RGBA);
 	};
 	
-	//attach to global scope
-	//TODO: RequireJS, AMD, CommonJS, etc.
     /* jshint -W030 */
     !function(){
-        /* global module */
-        !!(typeof module !== 'undefined' && module.exports) ? (module.exports = ColorLib) : (global.Color = ColorLib);
+        /* global module, define */
+        // Node: Export function
+        if (typeof module !== 'undefined' && module.exports) {
+            module.exports = ColorLib;
+        }
+        // AMD/requirejs: Define the module
+        else if (typeof define === 'function' && define.amd) {
+            define(function () { return ColorLib; });
+        }
+        // Browser: Expose to window
+        else {
+            global.Color = ColorLib;
+        }
     }();
     /* jshint +W030 */
+    
 })(this);
