@@ -130,3 +130,5 @@ Also, thanks to the guys at EasyRGB for their helpful [color math and formulas](
 ##License
 
 This project is licensed under the MIT X11 License. Please use, adapt, and modify this project to your heart's content. Link back to this page wherever you can.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-17159207-7/colorjs-lib/readme)](https://github.com/igrigorik/ga-beacon)
