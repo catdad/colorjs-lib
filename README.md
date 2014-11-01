@@ -29,8 +29,9 @@ Advanced create methods
     Color.fromRGB({r:255,g:0,b:0});
     Color.fromRGBA({r:255,g:0,b:0,a:.5});
     Color.fromArray([255,0,0]);
+    Color.fromRYB({r:, y, b})
   
-Under advanced methods, there are also options to create colors from `CMYK`, `HSV`, and `HSL`, using an `Object` or `Array` values. There is also a random color generator.
+Under advanced methods, there are also options to create colors from `HEX`, `RGB`, `RGBA`, `CMYK`, `HSV`, `HSL`, and `RYB`, using an `Object` or `Array` values. There is also a random color generator.
 
     Color.fromCMYK({c: 0, m: 1, y: 1, k: 0});
     Color.fromCMYK([0, 1, 1, 0]);
@@ -52,6 +53,7 @@ Once you have created a color, you can convert it to any format you would like, 
     color.HSV(); //{h: 0, s: 1, v: 1}
     color.HSL(); //{h: 0, s: 1, l: 0.5}
     color.CMYK(); //{c: 0, m: 1, y: 1, k: 0}
+    color.RYB(); //{r: 255, y: 0, b: 0}
     
     color.toString(); //"#ff0000"
     
@@ -116,6 +118,23 @@ Calculate only lighter or darker monochrome colors:
     color.monochromeDark(count); //[original, dark1, dark2]
     
 _Note: The monochrome functions does not return pure black or white. Add those on your own if you need to. Also, `monochrome` does not necessarily return the original color, but rather colors of the same hue._
+
+Mix in another color:
+
+    var red = Color('ff0000'); // red
+    red.mixin( Color('00ffff') /* cyan */ );
+    
+    red.CSS(); // return #aa55aa, a purple
+    
+This `mixin` method modifies the original color. If you need a new color instead, use the `mix` method on the `Color` object to mix any two colors together:
+
+    var red = Color('ff0000'),
+        cyan = Color('00ffff');
+    
+    var mixed = Color.mix(red, cyan);
+    // this color will be #aa55aa
+
+_Note: Mixed colors will be adjusted for lightness, so that they match the original colors used for the mixture._
 
 ##Note
 
