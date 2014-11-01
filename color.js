@@ -401,10 +401,11 @@
     //mix this color with another one
     //this modifies the original color
     Color.prototype.mixin = function(color) {
-        var newRGB = ColorLib.mix(this, color);
-        
-        this.RGBA = newRGB.RGBA;
-        return this;
+        return ColorLib.mix({
+            color1: this, 
+            color2: color,
+            match: true
+        });
     };
     
     //add a toString method
@@ -697,9 +698,20 @@
 //	};
     // mix two colors using RYB color space
     ColorLib.mix = function mix(color1, color2){
+        var opts = {};
+        
+        if (color1 instanceof Color && color2 instanceof Color) { 
+            opts.one = color1;
+            opts.two = color2;
+        } else if (color1.one instanceof Color && color1.two instanceof Color) {
+            opts = color1;
+        } else {
+            throw new TypeError('Two Colors were not found in the parameters.');
+        }
+        
         // get red-yellow-blue colors
-        var ryb1 = color1.RYB(),
-            ryb2 = color2.RYB();
+        var ryb1 = opts.one.RYB(),
+            ryb2 = opts.two.RYB();
         
         // average the RYB channels
         var mixed = ColorLib.fromRYB({
@@ -708,10 +720,17 @@
             b: Math.round( (ryb1.b + ryb2.b) / 2 )
         });
         
+        // do not match lightness if specifically requested
+        /* jshint -W018 */
+        if ((!!opts.match) === false) {
+            return mixed;
+        }
+        /* jshint +W018 */
+        
         // mixing RYB can result in darker colors than the original
         // find the average lightness of the original colors and adjust the mixture
-        var oneHSL = color1.HSL(),
-            twoHSL = color2.HSL(),
+        var oneHSL = opts.one.HSL(),
+            twoHSL = opts.two.HSL(),
             mixedHSL = mixed.HSL(),
             averageLightness = (oneHSL.l + twoHSL.l) / 2;
         

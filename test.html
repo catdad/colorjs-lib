@@ -52,10 +52,14 @@
 <script>
     // manual tests
     
-    function mix(color1, color2) {
+    function mix(color1, color2, match) {
         var one = Color(color1),
             two = Color(color2),
-            mixed = Color.mix(one, two);
+            mixed = Color.mix({
+                one: one,
+                two: two,
+                match: !!match
+            });
         
         console.log('%c  one         ', 'padding: 5px 0; line-height: 2em; background-color: ' + one.CSS(), one.HSL());
         console.log('%c  two         ', 'padding: 5px 0; line-height: 2em; background-color: ' + two.CSS(), two.HSL());
