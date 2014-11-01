@@ -121,20 +121,30 @@ _Note: The monochrome functions does not return pure black or white. Add those o
 
 Mix in another color:
 
-    var red = Color('ff0000'); // red
-    red.mixin( Color('00ffff') /* cyan */ );
+    var red = Color('ff0000');
+    var cyan = Color('00ffff');
     
-    red.CSS(); // return #aa55aa, a purple
+    var purple = red.minin(cyan);
+    purple.CSS(); // return #aa55aa
     
-This `mixin` method modifies the original color. If you need a new color instead, use the `mix` method on the `Color` object to mix any two colors together:
+You can also use the `mix` method on the `Color` object to mix any two colors together:
 
     var red = Color('ff0000'),
         cyan = Color('00ffff');
     
-    var mixed = Color.mix(red, cyan);
-    // this color will be #aa55aa
+    var purple = Color.mix(red, cyan);
 
-_Note: Mixed colors will be adjusted for lightness, so that they match the original colors used for the mixture._
+Mixing colors this way will adjust the new color for lightness, so that it matches the original colors used for the mixture. You can skip the adjustment like this:
+
+    var red = Color('ff0000'),
+        cyan = Color('00ffff');
+    
+    var purple = Color.mix(red, cyan); // #aa55aa
+    var darkerPurple = Color.mix({
+        color1: red,
+        color2: cyan,
+        match: false
+    }); // #804080
 
 ##Note
 
