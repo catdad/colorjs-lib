@@ -61,9 +61,11 @@
                 match: !!match
             });
         
-        console.log('%c  one         ', 'padding: 5px 0; line-height: 2em; background-color: ' + one.CSS(), one.HSL());
-        console.log('%c  two         ', 'padding: 5px 0; line-height: 2em; background-color: ' + two.CSS(), two.HSL());
-        console.log('%c  mix         ', 'padding: 5px 0; line-height: 2em; background-color: ' + mixed.CSS(), mixed.HSL());
+        var css = 'padding: 5px 0; line-height: 2em; background-color: ';
+        
+        console.log('%c  one         ', css + one.CSS(), one.HSL());
+        console.log('%c  two         ', css + two.CSS(), two.HSL());
+        console.log('%c  mix         ', css + mixed.CSS(), mixed.HSL());
         
         return mixed.CSS();
     }
