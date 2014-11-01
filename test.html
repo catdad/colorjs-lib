@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tiny Request tests</title>
+    <title>ColorJS-Lib tests</title>
     
     <!-- include jasmine -->
     <script src='//cdnjs.cloudflare.com/ajax/libs/jasmine/2.0.0/jasmine.js'></script>
@@ -16,7 +16,8 @@
 </head>
 <body>
 
-<script src="color.min.js"></script>
+<!--<script src="color.min.js"></script>-->
+<script src="color.js"></script>
 <script>
     // sanity test
     describe("sanity", function(){
@@ -47,6 +48,21 @@
     
     
     /* */
+</script>
+<script>
+    // manual tests
+    
+    function mix(color1, color2) {
+        var one = Color(color1),
+            two = Color(color2),
+            mixed = Color.mix(one, two);
+        
+        console.log('%c  one         ', 'padding: 5px 0; line-height: 2em; background-color: ' + one.CSS(), one.HSL());
+        console.log('%c  two         ', 'padding: 5px 0; line-height: 2em; background-color: ' + two.CSS(), two.HSL());
+        console.log('%c  mix         ', 'padding: 5px 0; line-height: 2em; background-color: ' + mixed.CSS(), mixed.HSL());
+        
+        return mixed.CSS();
+    }
 </script>
 </body>
 </html>

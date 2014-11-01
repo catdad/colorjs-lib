@@ -180,6 +180,58 @@
 		
 		return {c:round(C),m:round(M),y:round(Y),k:round(K)};
 	};
+    
+    // red-yellow-blue color space
+    // Adapted from https://github.com/bahamas10/node-rgb2ryb
+    // MIT license
+    Color.prototype.RYB = function(set){
+        if (set) {
+            this.RGBA = ColorLib.fromRYB(set);
+            return this;
+        }
+        
+        var r = this.RGBA.r, g = this.RGBA.g, b = this.RGBA.b;
+        // Remove the whiteness from the color.
+        var w = Math.min(r, g, b);
+        r -= w;
+        g -= w;
+        b -= w;
+
+        var mg = Math.max(r, g, b);
+
+        // Get the yellow out of the red+green.
+        var y = Math.min(r, g);
+        r -= y;
+        g -= y;
+
+        // If this unfortunate conversion combines blue and green, then cut each in
+        // half to preserve the value's maximum range.
+        if (b && g) {
+            b /= 2.0;
+            g /= 2.0;
+        }
+
+        // Redistribute the remaining green.
+        y += g;
+        b += g;
+
+        // Normalize to values.
+        var my = Math.max(r, y, b);
+        if (my) {
+            var n = mg / my;
+            r *= n;
+            y *= n;
+            b *= n;
+        }
+
+        // Add the white back in.
+        r += w;
+        y += w;
+        b += w;
+
+        // And return back the ryb typed accordingly.
+        return { r:r, y:y, b:b };
+    };
 	
 	Color.prototype.removeAlpha = function(bg){
 		var a = this.RGBA.a;
@@ -526,6 +578,58 @@
 		
 		return creator(rgb);
 	};
+    
+    //RGB from [r,y,b] or {r,y,b}
+    // red-yellow-blue color space
+    // Adapted from https://github.com/bahamas10/node-rgb2ryb
+    // MIT license
+    ColorLib.fromRYB = function(val){
+        var r, y, b;
+		if (val instanceof Array){
+			r = val[0]; y = val[1]; b = val[2];
+		} else {
+			r = val.r; y = val.y; b = val.b;
+		}
+        
+        // Remove the whiteness from the color.
+        var w = Math.min(r, y, b);
+        r -= w;
+        y -= w;
+        b -= w;
+
+        var my = Math.max(r, y, b);
+
+        // Get the green out of the yellow and blue
+        var g = Math.min(y, b);
+        y -= g;
+        b -= g;
+
+        if (b && g) {
+            b *= 2.0;
+            g *= 2.0;
+        }
+
+        // Redistribute the remaining yellow.
+        r += y;
+        g += y;
+
+        // Normalize to values.
+        var mg = Math.max(r, g, b);
+        if (mg) {
+            var n = my / mg;
+            r *= n;
+            g *= n;
+            b *= n;
+        }
+
+        // Add the white back in.
+        r += w;
+        g += w;
+        b += w;
+
+        // And return back the ryb typed accordingly.
+        return creator({ r:r, g:g, b:b });
+    };
 	
 	//pseudo-random color
 	ColorLib.random = function(){
@@ -576,11 +680,38 @@
 		return colors;
 	};
 	//mix two colors evenly
-	ColorLib.mix = function mix(color1, color2){
-		//do not change original colors
-		var newColor = ColorLib(color1.RGBA);
-		return newColor.setAlpha(1/2).removeAlpha(color2.RGBA);
-	};
+    // yikes, averaging out RGB colors DOES NOT work
+//	ColorLib.mix = function mix(color1, color2){
+//		//do not change original colors
+//		var newColor = ColorLib(color1.RGBA);
+//		return newColor.setAlpha(1/2).removeAlpha(color2.RGBA);
+//	};
+    // mix two colors using RYB color space
+    ColorLib.mix = function mix(color1, color2){
+        // get red-yellow-blue colors
+        var ryb1 = color1.RYB(),
+            ryb2 = color2.RYB();
+        
+        // average the RYB channels
+        var mixed = ColorLib.fromRYB({
+            r: Math.round( (ryb1.r + ryb2.r) / 2 ),
+            y: Math.round( (ryb1.y + ryb2.y) / 2 ),
+            b: Math.round( (ryb1.b + ryb2.b) / 2 )
+        });
+        
+        // mixing RYB can result in darker colors than the original
+        // find the average lightness of the original colors and adjust the mixture
+        var oneHSL = color1.HSL(),
+            twoHSL = color2.HSL(),
+            mixedHSL = mixed.HSL(),
+            averageLightness = (oneHSL.l + twoHSL.l) / 2;
+        
+        return ColorLib.fromHSL({
+            h: mixedHSL.h,
+            s: mixedHSL.s,
+            l: averageLightness
+        });
+    };
 	
     /* jshint -W030 */
     !function(){
