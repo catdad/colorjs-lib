@@ -398,6 +398,15 @@
 		}
 	};
     
+    //mix this color with another one
+    //this modifies the original color
+    Color.prototype.mixin = function(color) {
+        var newRGB = ColorLib.mix(this, color);
+        
+        this.RGBA = newRGB.RGBA;
+        return this;
+    };
+    
     //add a toString method
     Color.prototype.toString = function toString(){
         return this.CSS();
