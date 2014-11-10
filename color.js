@@ -642,15 +642,31 @@
     };
 	
 	//pseudo-random color
-	ColorLib.random = function(){
-		var r = function(){ return Math.floor(Math.random()*256); };
-		var rgb = {
-			r: r(),
-			g: r(),
-			b: r()
-		};
+	ColorLib.random = function(opts){
+		// generate random number between 0 and ceil
+        var random = function(ceil){ return Math.floor(Math.random() * ceil); };
 		
-		return creator(rgb);
+        // check for HSL or HSV directives
+        if (opts.l === +opts.l) {
+            return ColorLib.fromHSL({
+                h: random(360),
+                s: opts.s || random(100)/100,
+                l: opts.l
+            });
+        } else if (opts.v === +opts.v) {
+            return ColorLib.fromHSV({
+                h: random(360),
+                s: opts.s || random(100)/100,
+                v: opts.v
+            });
+        }
+        
+        // generate a random RGB color
+        return creator({
+			r: random(256),
+			g: random(256),
+			b: random(256)
+		});
 	};
 	
 	/* lib helpers */
