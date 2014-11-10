@@ -29,7 +29,7 @@ Advanced create methods
     Color.fromRGB({r:255,g:0,b:0});
     Color.fromRGBA({r:255,g:0,b:0,a:.5});
     Color.fromArray([255,0,0]);
-    Color.fromRYB({r:, y, b})
+    Color.fromRYB({r:255,y:0,b:0})
   
 Under advanced methods, there are also options to create colors from `HEX`, `RGB`, `RGBA`, `CMYK`, `HSV`, `HSL`, and `RYB`, using an `Object` or `Array` values. There is also a random color generator.
 
