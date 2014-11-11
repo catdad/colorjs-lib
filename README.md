@@ -145,6 +145,20 @@ Mixing colors this way will adjust the new color for lightness, so that it match
         color2: cyan,
         match: false
     }); // #804080
+    
+Mixing also supports ratios:
+
+    var red = Color('ff0000'),
+        cyan = Color('00ffff');
+    
+    var someSortOfPink = Color.mix({
+        color1: red,
+        color2: cyan,
+        match: true,
+        ratio: .7
+    }); // #d22d5c
+
+All ratios are first color to second color. You may need to disable matching here, especially if trying to mix with white or black.
 
 ##Note
 

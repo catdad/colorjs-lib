@@ -52,13 +52,14 @@
 <script>
     // manual tests
     
-    function mix(color1, color2, match) {
+    function mix(color1, color2, match, ratio) {
         var one = Color(color1),
             two = Color(color2),
             mixed = Color.mix({
                 one: one,
                 two: two,
-                match: !!match
+                match: !!match,
+                ratio: ratio || .5
             });
         
         var css = 'padding: 5px 0; line-height: 2em; background-color: ';

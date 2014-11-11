@@ -714,7 +714,8 @@
 //	};
     // mix two colors using RYB color space
     ColorLib.mix = function mix(color1, color2){
-        var opts = {};
+        var opts = {},
+            ratio;
         
         if (color1 instanceof Color && color2 instanceof Color) { 
             opts.one = color1;
@@ -725,23 +726,31 @@
             throw new TypeError('Two Colors were not found in the parameters.');
         }
         
+        if (opts.ratio === 1) {
+            return opts.one;
+        } else if (opts.ratio === 0) {
+            return opts.two;
+        } else if (opts.ratio === +opts.ratio && opts.ratio > 0 && opts.ratio < 1) {
+            ratio = +opts.ratio;
+        } else {
+            ratio = 0.5;
+        }
+        
         // get red-yellow-blue colors
         var ryb1 = opts.one.RYB(),
             ryb2 = opts.two.RYB();
         
         // average the RYB channels
         var mixed = ColorLib.fromRYB({
-            r: Math.round( (ryb1.r + ryb2.r) / 2 ),
-            y: Math.round( (ryb1.y + ryb2.y) / 2 ),
-            b: Math.round( (ryb1.b + ryb2.b) / 2 )
+            r: Math.round( (ryb1.r * ratio) + (ryb2.r * (1 - ratio)) ),
+            y: Math.round( (ryb1.y * ratio) + (ryb2.y * (1 - ratio)) ),
+            b: Math.round( (ryb1.b * ratio) + (ryb2.b * (1 - ratio)) )
         });
         
         // do not match lightness if specifically requested
-        /* jshint -W018 */
-        if ((!!opts.match) === false) {
+        if (opts.match === false) {
             return mixed;
         }
-        /* jshint +W018 */
         
         // mixing RYB can result in darker colors than the original
         // find the average lightness of the original colors and adjust the mixture
