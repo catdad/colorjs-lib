@@ -154,7 +154,6 @@ Mixing also supports ratios:
     var someSortOfPink = Color.mix({
         color1: red,
         color2: cyan,
-        match: true,
         ratio: .7
     }); // #d22d5c
 
