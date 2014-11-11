@@ -418,9 +418,9 @@
 		//check for valid color values (0 - 255)
 		// set to 0 if invalid
 		var rgba = {};
-		rgba.r = (val.r && val.r >= 0 && val.r <= 255) ? val.r : 0;
-		rgba.g = (val.g && val.g >= 0 && val.g <= 255) ? val.g : 0;
-		rgba.b = (val.b && val.b >= 0 && val.b <= 255) ? val.b : 0;
+		rgba.r = (val.r && val.r >= 0 && val.r <= 255) ? Math.floor(val.r) : 0;
+		rgba.g = (val.g && val.g >= 0 && val.g <= 255) ? Math.floor(val.g) : 0;
+		rgba.b = (val.b && val.b >= 0 && val.b <= 255) ? Math.floor(val.b) : 0;
 		rgba.a = (val.a && val.a >= 0 && val.a <= 1) ? val.a : 1;
 		
 		return new Color(rgba);
