@@ -638,7 +638,7 @@
         b += w;
 
         // And return back the ryb typed accordingly.
-        return creator({ r:r, g:g, b:b });
+        return creator({ r: Math.floor(r), g: Math.floor(g), b: Math.floor(b) });
     };
 	
 	//pseudo-random color
@@ -757,12 +757,12 @@
         var oneHSL = opts.one.HSL(),
             twoHSL = opts.two.HSL(),
             mixedHSL = mixed.HSL(),
-            averageLightness = (oneHSL.l + twoHSL.l) / 2;
+            mixedLightness = (oneHSL.l * ratio) + (twoHSL.l * (1 - ratio));
         
         return ColorLib.fromHSL({
             h: mixedHSL.h,
             s: mixedHSL.s,
-            l: averageLightness
+            l: mixedLightness
         });
     };
 	
